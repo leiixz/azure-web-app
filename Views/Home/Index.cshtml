@@ -1,0 +1,106 @@
+﻿@{
+    ViewData["Title"] = "Home";
+    ViewData["ActiveTab"] = "Home";
+}
+
+<h1>My Portfolio</h1><br>
+
+<div class="carousel-container">
+    <div class="carousel">
+
+        <!-- Slide 1 -->
+        <div class="carousel-item active" data-link="/Home/Projects#personal">
+            <img src="~/images/sample1.jpg" alt="Personal Design">
+            <div class="carousel-caption">
+                <h3>Personal Design 🎨</h3>
+                <p>Creative explorations and personal artworks.</p>
+            </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="carousel-item" data-link="/Home/Projects#pubmats">
+            <img src="~/images/sample2.jpg" alt="Pubmats">
+            <div class="carousel-caption">
+                <h3>Publication Materials 🖼️</h3>
+                <p>Posters, pubmats, and layout designs.</p>
+            </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="carousel-item" data-link="/Home/Projects#creative">
+            <img src="~/images/sample3.jpg" alt="Creative Works">
+            <div class="carousel-caption">
+                <h3>Creative Works 💡</h3>
+                <p>Concepts, experiments, and mixed media ideas.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Controls -->
+    <button class="carousel-btn prev">&#10094;</button>
+    <button class="carousel-btn next">&#10095;</button>
+
+    <!-- Dots -->
+    <div class="carousel-dots">
+        <span class="dot active" data-index="0"></span>
+        <span class="dot" data-index="1"></span>
+        <span class="dot" data-index="2"></span>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const items = document.querySelectorAll('.carousel-item');
+    const dots = document.querySelectorAll('.dot');
+    const nextBtn = document.querySelector('.carousel-btn.next');
+    const prevBtn = document.querySelector('.carousel-btn.prev');
+
+    let currentIndex = 0;
+
+    function showSlide(index) {
+        items.forEach(item => item.classList.remove('active'));
+        dots.forEach(dot => dot.classList.remove('active'));
+
+        items[index].classList.add('active');
+        dots[index].classList.add('active');
+    }
+
+    // Next / Prev buttons
+    nextBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % items.length;
+        showSlide(currentIndex);
+    });
+
+    prevBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + items.length) % items.length;
+        showSlide(currentIndex);
+    });
+
+    // Dots navigation
+    dots.forEach(dot => {
+        dot.addEventListener('click', () => {
+            currentIndex = parseInt(dot.dataset.index);
+            showSlide(currentIndex);
+        });
+    });
+
+    // Click slide → redirect
+    items.forEach(item => {
+        item.addEventListener('click', () => {
+            const link = item.dataset.link;
+            if (link) {
+                window.location.href = link;
+            }
+        });
+    });
+
+    // Auto-slide
+    setInterval(() => {
+        currentIndex = (currentIndex + 1) % items.length;
+        showSlide(currentIndex);
+    }, 5000);
+});
+</script>
+}

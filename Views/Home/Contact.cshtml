@@ -1,0 +1,150 @@
+@{
+    ViewData["Title"] = "Contact";
+    ViewData["ActiveTab"] = "Contact";
+}
+
+<h1>Contact Me</h1>
+<br>
+
+<div class="contact-stage">
+    <div class="envelope-container">
+        <div class="envelope">
+            <div class="envelope-flap"></div>
+            <div class="letter">
+                <form asp-action="Contact" method="post" class="contact-form">
+
+                    <div class="form-group mb-3 floating">
+                        <input type="text" id="Name" name="Name" required/>
+                        <label for="Name">Name</label>
+                    </div>
+
+                    <div class="form-group mb-3 floating">
+                        <input type="email" id="Email" name="Email" required/>
+                        <label for="Email">Email</label>
+                    </div>
+
+                    <div class="form-group mb-3 floating">
+                        <textarea id="Message" name="Message" rows="5" required></textarea>
+                        <label for="Message">Message</label>
+                    </div>
+
+                    <button type="submit">Send Message</button>
+                </form>
+            </div>
+        </div>
+        <div class="envelope-hint">Click the envelope to open</div>
+    </div>
+</div>
+
+<style>
+/* ===== Floating Label ===== */
+.floating {
+    position: relative;
+}
+
+.floating input,
+.floating textarea {
+    width: 100%;
+    padding: 14px 12px; /* default padding */
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    font-size: 1rem;
+    background: transparent;
+    transition: padding 0.25s ease, transform 0.25s ease;
+}
+
+/* Label (acts like placeholder) - default centered */
+.floating label {
+    position: absolute;
+    top: 50%; /* vertically centered by default */
+    left: 12px;
+    transform: translateY(-50%);
+    background: transparent; /* default background while inside box */
+    padding: 0 4px;
+    color: #888;
+    font-size: 0.95rem;
+    pointer-events: none;
+    transition: 0.25s ease, top 0.25s ease, font-size 0.25s ease, background 0.25s ease;
+}
+
+/* Move label to top border when active (focused or filled) */
+.floating input:focus + label,
+.floating textarea:focus + label,
+.floating input:valid + label,
+.floating textarea:valid + label {
+    top: 0; /* inline with top border */
+    left: 10px;
+    font-size: 0.85rem;
+    color: #333;
+    background: #FFFBEA; /* background updated for placeholder label */
+}
+
+/* Shift input/textarea down slightly when selected to avoid overlap */
+.floating input:focus,
+.floating textarea:focus,
+.floating input:valid,
+.floating textarea:valid {
+    padding-top: 22px;
+    transform: translateY(2px); /* slight downward movement */
+}
+
+/* Optional focus highlight */
+.floating input:focus,
+.floating textarea:focus {
+    border-color: #FFD966;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // ===== Envelope =====
+    const envelopeContainer = document.querySelector('.envelope-container');
+    const envelope = document.querySelector('.envelope');
+    const letter = document.querySelector('.letter');
+
+    envelopeContainer.addEventListener('click', () => {
+        envelopeContainer.classList.toggle('open');
+    });
+
+    // Prevent closing when clicking inside letter (inputs included)
+    letter.addEventListener('click', e => e.stopPropagation());
+
+    // Click outside closes envelope
+    document.addEventListener('click', e => {
+        if (envelopeContainer.classList.contains('open') && !envelope.contains(e.target)) {
+            envelopeContainer.classList.remove('open');
+        }
+    });
+
+    // ===== Project Preview / Sticker (unchanged) =====
+    const previewBox = document.querySelector('.preview-box');
+    const previewImg = previewBox.querySelector('.preview-img');
+    const previewTitle = previewBox.querySelector('.preview-title');
+    const previewDesc = previewBox.querySelector('.preview-desc');
+    const projectBoxes = document.querySelectorAll('.project-box');
+    const stickers = previewBox.querySelectorAll('.sticker');
+
+    projectBoxes.forEach(box => {
+        box.addEventListener('mouseenter', () => {
+            previewTitle.textContent = box.dataset.title;
+            previewImg.src = box.dataset.img;
+            previewDesc.textContent = box.dataset.desc;
+            previewBox.classList.add('expanded');
+        });
+        box.addEventListener('mouseleave', () => {
+            previewTitle.textContent = 'Hover a project to see details';
+            previewImg.src = '~/images/placeholder.png';
+            previewDesc.textContent = '';
+            previewBox.classList.remove('expanded');
+        });
+    });
+
+    stickers.forEach(sticker => {
+        sticker.addEventListener('click', () => {
+            stickers.forEach(s => s.classList.remove('selected'));
+            sticker.classList.add('selected');
+        });
+    });
+});
+</script>
